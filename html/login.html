@@ -9,24 +9,26 @@
       href="styles/styleregister.css"
     />
     <script>
-        function loginsuccessfull(){
-          event.preventDefault(); // Prevent the default form submission behavior
-
+         function loginsuccessfull() {
             // Get the entered username and password
+            event.preventDefault() ;
+            console.log("Login Successful!") ;
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
 
             // Check username and password
-             if (username === "admin" && password === "admin") {
+            if (username === "admin" && password === "admin") {
                 document.getElementById('register').innerHTML = "Admin Login Success";
             } else {
-              document.getElementById('register').innerHTML = "Login Successful"
-            }   
+                document.getElementById('register').innerHTML = "Login Successful";
+            }
 
-            setTimeout(function(){
+            // Redirect to function.html after a delay of 3 seconds
+            setTimeout(function() {
                 window.location.href = "function.html";
             }, 3000);
         }
+        
       </script>
   </head>
   <body>
@@ -60,9 +62,7 @@
             <div>
               <button type="submit" >LogIn</button>
             </div>
-            <div class="replace">
-
-            </div>
+            <div id="register"></div>
             <!-- <div>
               <button type="reset">Reset</button>
             </div> -->
