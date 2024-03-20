@@ -269,11 +269,11 @@ function displayAudio(audioData) {
 
 function updateToFlask(){
     if (selectedAudioFilesIds.length === 0){
-        alert("No Audio Selected.");
+        alert("Please select Audio");
         return;
     }
     else if (selectedImagesBlobs.length === 0){
-        alert("No Images selected");
+        alert("Please select Images");
         return ;
     }
     else{
