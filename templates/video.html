@@ -67,8 +67,16 @@ button:hover {
 </head>
 
 <body onload="displayUploadedImages2();fetchAudio()" class = 'container'>
-    <div class="a">
-        Video Page
+    <div class="topbar">
+        <div class="a">
+            Video Page
+        </div>
+        <div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+        <div class="function">
+            <a href="{{url_for('back_to_home')}}" style="text-decoration: none;color: white;">Back to home</a>
+        </div>
     </div>
     <div>
         <div>
@@ -135,9 +143,10 @@ button:hover {
         <div>
             <label for="resolution">Resolution :</label>
             <select id="resolution" name="resolution">
-                <option value="480p">480p</option>
-                <option value="720p">720p</option>
-                <option value="1080p" selected>1080p (Default)</option>
+                <option value="144p">144p</option>
+                <option value="360p">360p</option>
+                <option value="720p" selected>720p(Default)</option>
+                <option value="1080p">1080p </option>
             </select>
         </div>
         <div>
@@ -147,7 +156,7 @@ button:hover {
                 <option value="none" selected>None (Default)</option>
             </select>
 
-        </div>
+        </div>  
     </div>
 
 
@@ -167,8 +176,7 @@ button:hover {
     </div>
 
     <div class = "download-link" style="text-align: center;">
-        <a id="download-link" style="text-decoration: none;" download>
-        </a>
+       
     </div>
 </body>
 
