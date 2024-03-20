@@ -14,16 +14,37 @@ import tempfile
 
 url = urlparse(os.environ["DATABASE_URL"])
 
-# Decode the base64 certificate
-cert_decoded = base64.b64decode(os.environ['ROOT_CERT_BASE64'])
+def get_database_connected():
+    # Decode the base64 certificate
+    cert_decoded = base64.b64decode(os.environ['ROOT_CERT_BASE64'])
+    
+    # Define the path to save the certificate
+    cert_path = '/opt/render/.postgresql/root.crt'
+    os.makedirs(os.path.dirname(cert_path), exist_ok=True)
+    
+    # Write the certificate to the file
+    with open(cert_path, 'wb') as cert_file:
+        cert_file.write(cert_decoded)
 
-# Define the path to save the certificate
-cert_path = '/opt/render/.postgresql/root.crt'
-os.makedirs(os.path.dirname(cert_path), exist_ok=True)
+    try:
+        connection = psycopg2.connect(
+            host=url.hostname,
+            port=url.port,
+            dbname=url.path[1:],
+            user=url.username,
+            password=url.password,
+            sslmode='verify-full',
+            sslrootcert=cert_path
+        )
+        return connection
+    except psycopg2.OperationalError as e:
+        print(f"Error connecting to the database: {e}")
+        return None
 
-# Write the certificate to the file
-with open(cert_path, 'wb') as cert_file:
-    cert_file.write(cert_decoded)
+
+url = urlparse(os.environ["DATABASE_URL"])
+
+
 
 
 app = Flask(__name__)
@@ -32,18 +53,7 @@ app.secret_key = 'your_secret_key_here'
 app.config['JWT_SECRET_KEY'] = 'jwt_secret_key_here'
 jwt = JWTManager(app)
 
-try:
-    connection = psycopg2.connect(
-        host=url.hostname,
-        port=url.port,
-        dbname=url.path[1:],
-        user=url.username,
-        password=url.password,
-        sslmode='verify-full',
-        sslrootcert=cert_path
-    )
-except psycopg2.OperationalError as e:
-    print(f"Error connecting to the database: {e}")
+
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -51,6 +61,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'],exist_ok=True)
 
 @app.route('/admin',methods=['GET'])
 def admin(): 
+    connection = get_database_connected()
     username = session.get('username')
     if not username : 
         return redirect(url_for('login'))
@@ -81,6 +92,7 @@ def admin():
 
 @app.route('/')
 def welcome():
+    connection = get_database_connected()
     username = session.get('username')
     if username: 
         return render_template('function.html',userName=username)
@@ -88,7 +100,7 @@ def welcome():
 
 @app.route('/registration',methods=['GET','POST'])
 def registration():
-
+    connection = get_database_connected()
     if request.method == 'GET':
         return render_template('registration.html')
     elif request.method == 'POST':
@@ -115,7 +127,7 @@ def registration():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-    
+     connection = get_database_connected()   
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -145,7 +157,7 @@ def login():
 
 @app.route('/upload',methods = ['POST'])
 def upload():
-    
+    connection = get_database_connected()    
     try:
         images = request.files.getlist('images')
         # username = request.form['username']
@@ -211,7 +223,7 @@ def display():
     if not username:
         return jsonify({'error': 'User not logged in'}), 401
     print("Received username:", username)
-
+    connection = get_database_connected()
     with connection.cursor() as cursor:
         create_image_table = '''CREATE TABLE IF NOT EXISTS Images (
             Image_Id SERIAL PRIMARY KEY,
@@ -263,6 +275,7 @@ def  back_to_home():
 
 @app.route('/video', methods=['GET', 'POST'])
 def video():
+        connection = get_database_connected()
         username = session.get('username')
         if not username:
             # return jsonify({'error': 'User not logged in'}), 401
@@ -271,6 +284,7 @@ def video():
 
 @app.route('/get_audio_from_database')
 def get_all_audio():
+    connection = get_database_connected()
     try:
         # Connect to the database
         # connection = pymysql.connect(host=mysql_host,user=mysql_user,password = mysql_password,db=mysql_db,cursorclass=pymysql.cursors.DictCursor)
@@ -291,7 +305,7 @@ def get_all_audio():
 def serve_audio(id):
 
     # connection = pymysql.connect(host=mysql_host,user=mysql_user,password = mysql_password,db=mysql_db,cursorclass=pymysql.cursors.DictCursor)
-
+    connection = get_database_connected()
     with connection.cursor() as cursor:
         try:
             query = "SELECT AudioData FROM Audio WHERE Audio_id = %s"
@@ -310,6 +324,7 @@ def serve_audio(id):
 
 @app.route('/create_video', methods=['GET' , 'POST'])
 def create_video():
+    connection = get_database_connected()
     selected_images_blobs = request.form.getlist('selectedImagesBlobs[]')
     selected_audio_ids = request.form.getlist('selectedAudioFilesIds[]')
     selected_resolution = request.form.get('resolution')
