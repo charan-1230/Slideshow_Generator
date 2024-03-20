@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="{{url_for('static', filename='styles/styleregister.css')}}"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon-32x32.png') }}" type="images">
     <!-- <script>
         function loginsuccessfull(){
@@ -37,7 +38,7 @@
         <form action="/login" method="POST">
           <div class="flex-form">
             <div>
-              <b style="color:whitesmoke;font-size: large;">Username : <br></b>
+              <b style="color:whitesmoke;font-size:x-large;">Username : <br></b>
               <input
                 type="text"
                 id="username"
@@ -46,11 +47,11 @@
                 required
               />
               {% if error %}
-              <p style="color: black;font-size: large;padding: 0%;">*{{error}}</p>
+              <p style="color: whitesmoke;font-size: x-large;padding: 0%;">*{{error}}</p>
               {% endif %}
             </div>
             <div>
-              <b style="color:whitesmoke;font-size: large;">Password : <br></b>
+              <b style="color:whitesmoke;font-size: x-large;">Password : <br></b>
               <input
                 type="password"
                 id="password"
@@ -62,7 +63,7 @@
           </div>
           <div class="buttons">
             <div>
-              <button> Login
+              <button> <b>Login</b>
               </button>
             </div>
           </div>
