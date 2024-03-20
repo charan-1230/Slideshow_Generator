@@ -87,8 +87,14 @@
   </div>
 
   <div class="socials">
-    <button class="button">Contact Us</button>
+    <button class="button" onclick="Email()">Contact Us</button>
   </div>
+  <script>
+    function Email() {
+    var emailAddress = "saicharanbakaram30@gmail.com";
+    window.location.href = "mailto:" + emailAddress;
+  }
+  </script>
 
   <style>
     .button {
