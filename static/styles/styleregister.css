@@ -4,12 +4,14 @@ body {
     background-image: url(https://wallpapers.com/images/featured/space-sjryfre8k8f6i3ge.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    font-family: Madimi One;
 }
 p {
     text-align: center;
     color: rgb(233, 231, 229);
     text-shadow: 1% 1% 2% 2%;
     font-size: 60px;
+    /* font-family: Madimi One; */
 }
 .register {
     border: solid 2px none;
@@ -67,6 +69,7 @@ button {
     border-color: rgba(255, 255, 255, 0.786);
     background-color:black;
     color:white;
+    /* font-family: Quicksand; */
 
 }
 button:hover {
@@ -107,7 +110,7 @@ button {
     height: 3em;
     border-radius: 30em;
     font-size: 15px;
-    font-family: inherit;
+    /* font-family: Quicksand; */
     border: none;
     position: relative;
     overflow: hidden;
